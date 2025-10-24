@@ -1,0 +1,452 @@
+-- ============================================
+-- PILLAI BOYS HOSTEL MANAGEMENT SYSTEM
+-- PostgreSQL Database Schema
+-- ============================================
+
+-- Enable UUID extension for generating unique IDs
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- ============================================
+-- USERS & AUTHENTICATION
+-- ============================================
+
+-- Students table
+CREATE TABLE students (
+    student_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    admission_number VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    college VARCHAR(100), -- PCE, PICA, PIMSR, PCACS
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Hostel Incharge/Admin table
+CREATE TABLE hostel_incharge (
+    incharge_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    administrator_id VARCHAR(50) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- ============================================
+-- ROOMS & FACILITIES
+-- ============================================
+
+-- Room types enum
+CREATE TYPE room_type AS ENUM ('normal', 'attached', 'attached_ac');
+
+-- Rooms table
+CREATE TABLE rooms (
+    room_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    room_number VARCHAR(10) UNIQUE NOT NULL,
+    floor_number INTEGER NOT NULL CHECK (floor_number BETWEEN 1 AND 4),
+    room_type room_type NOT NULL,
+    capacity INTEGER NOT NULL,
+    occupied_count INTEGER DEFAULT 0,
+    price_per_month DECIMAL(10,2) NOT NULL,
+    has_ac BOOLEAN DEFAULT FALSE,
+    has_attached_washroom BOOLEAN DEFAULT FALSE,
+    is_available BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT check_occupancy CHECK (occupied_count <= capacity)
+);
+
+-- Room facilities/amenities
+CREATE TABLE room_facilities (
+    facility_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    room_id UUID REFERENCES rooms(room_id) ON DELETE CASCADE,
+    facility_name VARCHAR(100) NOT NULL,
+    quantity INTEGER DEFAULT 1,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- BOOKINGS & ALLOTMENTS
+-- ============================================
+
+-- Booking status enum
+CREATE TYPE booking_status AS ENUM ('pending', 'confirmed', 'rejected', 'cancelled', 'completed');
+
+-- Room bookings/applications
+CREATE TABLE bookings (
+    booking_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id UUID REFERENCES students(student_id) ON DELETE CASCADE,
+    room_id UUID REFERENCES rooms(room_id) ON DELETE SET NULL,
+    booking_status booking_status DEFAULT 'pending',
+    booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    check_in_date DATE,
+    check_out_date DATE,
+    duration_months INTEGER,
+    total_amount DECIMAL(10,2),
+    payment_status VARCHAR(50) DEFAULT 'unpaid',
+    approved_by UUID REFERENCES hostel_incharge(incharge_id),
+    approval_date TIMESTAMP,
+    rejection_reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Current room allotments (active stays)
+CREATE TABLE room_allotments (
+    allotment_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id UUID REFERENCES students(student_id) ON DELETE CASCADE,
+    room_id UUID REFERENCES rooms(room_id) ON DELETE CASCADE,
+    booking_id UUID REFERENCES bookings(booking_id),
+    bed_number INTEGER,
+    check_in_date DATE NOT NULL,
+    check_out_date DATE,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(room_id, bed_number)
+);
+
+-- ============================================
+-- PAYMENTS
+-- ============================================
+
+-- Payment status enum
+CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
+
+-- Payments table
+CREATE TABLE payments (
+    payment_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    booking_id UUID REFERENCES bookings(booking_id) ON DELETE CASCADE,
+    student_id UUID REFERENCES students(student_id) ON DELETE CASCADE,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_method VARCHAR(50), -- online, cash, card, etc.
+    payment_status payment_status DEFAULT 'pending',
+    transaction_id VARCHAR(255) UNIQUE,
+    payment_date TIMESTAMP,
+    payment_for VARCHAR(100), -- 'booking', 'monthly_rent', 'deposit', etc.
+    receipt_number VARCHAR(50),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- NOTICES & ANNOUNCEMENTS
+-- ============================================
+
+-- Notices table
+CREATE TABLE notices (
+    notice_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    posted_by UUID REFERENCES hostel_incharge(incharge_id),
+    notice_type VARCHAR(50), -- 'general', 'urgent', 'maintenance', 'event', etc.
+    is_active BOOLEAN DEFAULT TRUE,
+    expiry_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- GRIEVANCES & COMPLAINTS
+-- ============================================
+
+-- Grievance status enum
+CREATE TYPE grievance_status AS ENUM ('submitted', 'in_progress', 'resolved', 'closed', 'rejected');
+
+-- Grievances table
+CREATE TABLE grievances (
+    grievance_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    student_id UUID REFERENCES students(student_id) ON DELETE CASCADE,
+    room_id UUID REFERENCES rooms(room_id) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(100), -- 'maintenance', 'cleanliness', 'security', 'facilities', etc.
+    grievance_status grievance_status DEFAULT 'submitted',
+    priority VARCHAR(20) DEFAULT 'medium', -- 'low', 'medium', 'high', 'urgent'
+    assigned_to UUID REFERENCES hostel_incharge(incharge_id),
+    resolution_notes TEXT,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Grievance updates/comments
+CREATE TABLE grievance_updates (
+    update_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    grievance_id UUID REFERENCES grievances(grievance_id) ON DELETE CASCADE,
+    updated_by UUID, -- Can be student or incharge
+    update_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- MAINTENANCE & ASSETS
+-- ============================================
+
+-- Maintenance requests
+CREATE TABLE maintenance_requests (
+    request_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    room_id UUID REFERENCES rooms(room_id) ON DELETE CASCADE,
+    reported_by UUID REFERENCES students(student_id),
+    issue_description TEXT NOT NULL,
+    issue_type VARCHAR(100), -- 'plumbing', 'electrical', 'furniture', 'ac', etc.
+    status VARCHAR(50) DEFAULT 'pending',
+    assigned_to UUID REFERENCES hostel_incharge(incharge_id),
+    estimated_cost DECIMAL(10,2),
+    actual_cost DECIMAL(10,2),
+    scheduled_date DATE,
+    completed_date DATE,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- INDEXES FOR PERFORMANCE
+-- ============================================
+
+-- Students indexes
+CREATE INDEX idx_students_email ON students(email);
+CREATE INDEX idx_students_admission ON students(admission_number);
+CREATE INDEX idx_students_active ON students(is_active);
+
+-- Rooms indexes
+CREATE INDEX idx_rooms_floor ON rooms(floor_number);
+CREATE INDEX idx_rooms_type ON rooms(room_type);
+CREATE INDEX idx_rooms_available ON rooms(is_available);
+CREATE INDEX idx_rooms_number ON rooms(room_number);
+
+-- Bookings indexes
+CREATE INDEX idx_bookings_student ON bookings(student_id);
+CREATE INDEX idx_bookings_room ON bookings(room_id);
+CREATE INDEX idx_bookings_status ON bookings(booking_status);
+CREATE INDEX idx_bookings_date ON bookings(booking_date);
+
+-- Allotments indexes
+CREATE INDEX idx_allotments_student ON room_allotments(student_id);
+CREATE INDEX idx_allotments_room ON room_allotments(room_id);
+CREATE INDEX idx_allotments_active ON room_allotments(is_active);
+
+-- Payments indexes
+CREATE INDEX idx_payments_booking ON payments(booking_id);
+CREATE INDEX idx_payments_student ON payments(student_id);
+CREATE INDEX idx_payments_status ON payments(payment_status);
+CREATE INDEX idx_payments_date ON payments(payment_date);
+
+-- Grievances indexes
+CREATE INDEX idx_grievances_student ON grievances(student_id);
+CREATE INDEX idx_grievances_status ON grievances(grievance_status);
+CREATE INDEX idx_grievances_submitted ON grievances(submitted_at);
+
+-- ============================================
+-- TRIGGERS FOR AUTO-UPDATES
+-- ============================================
+
+-- Function to update timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Apply trigger to all tables with updated_at column
+CREATE TRIGGER update_students_updated_at BEFORE UPDATE ON students
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_hostel_incharge_updated_at BEFORE UPDATE ON hostel_incharge
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_rooms_updated_at BEFORE UPDATE ON rooms
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_bookings_updated_at BEFORE UPDATE ON bookings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_allotments_updated_at BEFORE UPDATE ON room_allotments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Function to update room occupancy count
+CREATE OR REPLACE FUNCTION update_room_occupancy()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        UPDATE rooms 
+        SET occupied_count = occupied_count + 1,
+            is_available = CASE WHEN occupied_count + 1 >= capacity THEN FALSE ELSE TRUE END
+        WHERE room_id = NEW.room_id;
+    ELSIF TG_OP = 'DELETE' THEN
+        UPDATE rooms 
+        SET occupied_count = occupied_count - 1,
+            is_available = TRUE
+        WHERE room_id = OLD.room_id;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_room_occupancy
+AFTER INSERT OR DELETE ON room_allotments
+FOR EACH ROW EXECUTE FUNCTION update_room_occupancy();
+
+-- ============================================
+-- SAMPLE DATA INSERTION
+-- ============================================
+
+-- Insert sample rooms (based on roomallot.html data)
+INSERT INTO rooms (room_number, floor_number, room_type, capacity, price_per_month, has_ac, has_attached_washroom) VALUES
+-- Floor 1
+('101', 1, 'normal', 4, 7000, FALSE, FALSE),
+('102', 1, 'normal', 4, 7000, FALSE, FALSE),
+('103', 1, 'normal', 4, 7000, FALSE, FALSE),
+('104', 1, 'normal', 4, 7000, FALSE, FALSE),
+('105', 1, 'attached', 3, 11000, FALSE, TRUE),
+('106', 1, 'attached_ac', 2, 15000, TRUE, TRUE),
+-- Floor 2
+('201', 2, 'normal', 4, 7000, FALSE, FALSE),
+('202', 2, 'normal', 4, 7000, FALSE, FALSE),
+('203', 2, 'normal', 4, 7000, FALSE, FALSE),
+('204', 2, 'normal', 4, 7000, FALSE, FALSE),
+('205', 2, 'attached', 3, 11000, FALSE, TRUE),
+('206', 2, 'attached_ac', 2, 15000, TRUE, TRUE),
+-- Floor 3
+('301', 3, 'normal', 4, 7000, FALSE, FALSE),
+('302', 3, 'normal', 4, 7000, FALSE, FALSE),
+('303', 3, 'normal', 4, 7000, FALSE, FALSE),
+('304', 3, 'normal', 4, 7000, FALSE, FALSE),
+('305', 3, 'attached', 3, 11000, FALSE, TRUE),
+('306', 3, 'attached_ac', 2, 15000, TRUE, TRUE),
+-- Floor 4
+('401', 4, 'normal', 4, 7000, FALSE, FALSE),
+('402', 4, 'normal', 4, 7000, FALSE, FALSE),
+('403', 4, 'normal', 4, 7000, FALSE, FALSE),
+('404', 4, 'normal', 4, 7000, FALSE, FALSE),
+('405', 4, 'attached', 3, 11000, FALSE, TRUE),
+('406', 4, 'attached_ac', 2, 15000, TRUE, TRUE);
+
+-- Insert room facilities for different room types
+-- Normal rooms facilities
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Study Table', 4 FROM rooms WHERE room_type = 'normal';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Shared Cupboard', 2 FROM rooms WHERE room_type = 'normal';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Charging Switch Board', 2 FROM rooms WHERE room_type = 'normal';
+
+-- Attached washroom facilities
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Study Table', 3 FROM rooms WHERE room_type = 'attached';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Small Cupboard', 3 FROM rooms WHERE room_type = 'attached';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Charging Switch Board', 2 FROM rooms WHERE room_type = 'attached';
+
+-- Attached + AC facilities
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Study Table', 2 FROM rooms WHERE room_type = 'attached_ac';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Small Cupboard', 2 FROM rooms WHERE room_type = 'attached_ac';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, 'Charging Switch Board', 2 FROM rooms WHERE room_type = 'attached_ac';
+
+INSERT INTO room_facilities (room_id, facility_name, quantity) 
+SELECT room_id, '1 Ton AC', 1 FROM rooms WHERE room_type = 'attached_ac';
+
+-- ============================================
+-- USEFUL VIEWS
+-- ============================================
+
+-- View for available rooms summary
+CREATE VIEW available_rooms_summary AS
+SELECT 
+    r.room_number,
+    r.floor_number,
+    r.room_type,
+    r.capacity,
+    r.occupied_count,
+    (r.capacity - r.occupied_count) AS available_beds,
+    r.price_per_month,
+    r.has_ac,
+    r.has_attached_washroom,
+    CASE 
+        WHEN r.occupied_count = 0 THEN 'Available'
+        WHEN r.occupied_count < r.capacity THEN 'Partially Filled'
+        ELSE 'Full'
+    END AS status
+FROM rooms r
+ORDER BY r.floor_number, r.room_number;
+
+-- View for student booking history
+CREATE VIEW student_booking_history AS
+SELECT 
+    s.name AS student_name,
+    s.email,
+    s.admission_number,
+    r.room_number,
+    b.booking_status,
+    b.booking_date,
+    b.check_in_date,
+    b.check_out_date,
+    b.total_amount,
+    b.payment_status
+FROM bookings b
+JOIN students s ON b.student_id = s.student_id
+LEFT JOIN rooms r ON b.room_id = r.room_id
+ORDER BY b.booking_date DESC;
+
+-- View for active grievances
+CREATE VIEW active_grievances_view AS
+SELECT 
+    g.grievance_id,
+    s.name AS student_name,
+    s.email AS student_email,
+    r.room_number,
+    g.title,
+    g.category,
+    g.grievance_status,
+    g.priority,
+    g.submitted_at,
+    hi.full_name AS assigned_to_name
+FROM grievances g
+JOIN students s ON g.student_id = s.student_id
+LEFT JOIN rooms r ON g.room_id = r.room_id
+LEFT JOIN hostel_incharge hi ON g.assigned_to = hi.incharge_id
+WHERE g.grievance_status NOT IN ('resolved', 'closed')
+ORDER BY 
+    CASE g.priority 
+        WHEN 'urgent' THEN 1 
+        WHEN 'high' THEN 2 
+        WHEN 'medium' THEN 3 
+        ELSE 4 
+    END,
+    g.submitted_at DESC;
+
+-- ============================================
+-- COMMENTS FOR DOCUMENTATION
+-- ============================================
+
+COMMENT ON TABLE students IS 'Stores student information who can register and book hostel rooms';
+COMMENT ON TABLE hostel_incharge IS 'Stores hostel administrator/incharge information';
+COMMENT ON TABLE rooms IS 'Contains all room details including type, capacity, and pricing';
+COMMENT ON TABLE bookings IS 'Tracks all room booking applications and their status';
+COMMENT ON TABLE room_allotments IS 'Current active room assignments to students';
+COMMENT ON TABLE payments IS 'Payment records for bookings and monthly rents';
+COMMENT ON TABLE grievances IS 'Student complaints and issues tracking system';
+COMMENT ON TABLE notices IS 'Hostel announcements and notices board';
+COMMENT ON TABLE maintenance_requests IS 'Maintenance and repair requests for rooms';
+
+select * from bookings;

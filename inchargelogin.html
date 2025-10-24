@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hostel Incharge Login</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF);
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-frame {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 1.5px solid #a3b1c6;
+      width: 400px;
+      text-align: center;
+      position: relative;
+    }
+    .login-frame h2 {
+      margin: 0 0 20px 0;
+      color: #273c75;
+    }
+    .input-group {
+      margin-bottom: 18px;
+      position: relative;
+      text-align: left;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #374765;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #6b8eae;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .btn-grad {
+      background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+      margin: 15px 0 0 0;
+      padding: 14px 0;
+      text-align: center;
+      text-transform: uppercase;
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;
+      box-shadow: 0 0 20px #eee;
+      border-radius: 10px;
+      display: block;
+      width: 100%;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-grad:hover {
+      background-position: right center;
+      color: #fff;
+      text-decoration: none;
+    }
+    .hint {
+      font-size: 0.93rem;
+      color: #485570;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <a href="landing.html" title="Home"
+    style="position:fixed; top:29px; left:29px; z-index:101; display:inline-flex; align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#ffffff" viewBox="0 0 24 24">
+      <path
+        d="M10.19 2.44a2.75 2.75 0 0 1 3.62 0l7.25 6.47A2.75 2.75 0 0 1 22 10.47V19a3 3 0 0 1-3 3h-2.25a.75.75 0 0 1-.75-.75V16a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-.75.75H5a3 3 0 0 1-3-3v-8.53a2.75 2.75 0 0 1 .94-2.06l7.25-6.47zm2.13 1.06a1.25 1.25 0 0 0-1.64 0l-7.25 6.47a1.25 1.25 0 0 0-.43.94V19a1.5 1.5 0 0 0 1.5 1.5h2.25V16a2.5 2.5 0 0 1 2.5-2.5h4A2.5 2.5 0 0 1 17.5 16v4.5H19a1.5 1.5 0 0 0 1.5-1.5v-8.53a1.25 1.25 0 0 0-.43-.94l-7.25-6.47z" />
+    </svg>
+  </a> 
+  <div class="login-frame">
+    <img src="flows.png" alt="Flows Logo"
+        style="width: 60px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px #0002; margin-right: 10px; float:left;">
+      
+    <h2>Hostel Incharge Login</h2>
+    <form id="login-form">
+      <br>
+      <div class="input-group">
+        <label for="email">MES Mail ID</label>
+        <input 
+          id="email"
+          type="email" 
+          placeholder="Email (username@mes.ac.in)" 
+          pattern="^[a-zA-Z0-9._%+-]+@mes\.ac\.in$" 
+          title="Please use your MES Email (example@mes.ac.in)" 
+          required 
+          autocomplete="username"
+        />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input 
+          id="password"
+          type="password" 
+          placeholder="Password" 
+          required 
+          autocomplete="current-password"
+        />
+      </div>
+      <div class="input-group">
+        <label for="adminid">Administrator ID</label>
+        <input 
+          id="adminid"
+          type="text" 
+          placeholder="Administrator ID" 
+          required 
+          autocomplete="off"
+        />
+      </div>
+      <button type="submit" class="btn-grad">Login</button>
+    </form>
+    <div class="hint">Use your MES institutional email and provided Administrator ID.</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Add your login logic here
+      alert('Login functionality to be implemented');
+      // Redirect to dashboard: window.location.href = 'inchargedash.html';
+    });
+  </script>
+</body>
+</html>

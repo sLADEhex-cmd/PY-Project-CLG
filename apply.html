@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apply for Room</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, #00f2fe, #4facfe, #f093fb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  select {
+    width: 220px;
+    font-size: 1.1rem;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 30px;
+    outline: none;
+  }
+  button {
+    background: linear-gradient(90deg, #00f2fe, #4facfe);
+    border: none;
+    border-radius: 40px;
+    padding: 15px 50px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(0, 242, 254, 0.5);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    transform: scale(1.05);
+    box-shadow: 0 10px 35px rgba(0, 242, 254, 0.8);
+  }
+</style>
+</head>
+<body>
+
+<h1>Select Your Room</h1>
+<label for="roomSelect">Choose Room Number:</label>
+<select id="roomSelect">
+  <option value="">-- Select Room --</option>
+  <!-- Common Washroom rooms -->
+  <option value="common">101</option>
+  <option value="common">102</option>
+  <option value="common">103</option>
+  <option value="common">104</option>
+  <option value="common">201</option>
+  <option value="common">202</option>
+  <option value="common">203</option>
+  <option value="common">204</option>
+  <option value="common">301</option>
+  <option value="common">302</option>
+  <option value="common">303</option>
+  <option value="common">304</option>
+  <option value="common">401</option>
+  <option value="common">402</option>
+  <option value="common">403</option>
+  <option value="common">404</option>
+  
+  <!-- Attached Washroom rooms -->
+  <option value="attached">105</option>
+  <option value="attached">205</option>
+  <option value="attached">305</option>
+  <option value="attached">405</option>
+  
+  <!-- Attached + AC rooms -->
+  <option value="attached_ac">106</option>
+  <option value="attached_ac">206</option>
+  <option value="attached_ac">306</option>
+  <option value="attached_ac">406</option>
+</select>
+
+<button id="applyNowBtn">Apply Now</button>
+
+<script>
+  document.getElementById('applyNowBtn').addEventListener('click', function() {
+    const select = document.getElementById('roomSelect');
+    const type = select.value;
+    if (!type) {
+      alert('Please select a room.');
+      return;
+    }
+    if (type === 'common') {
+      window.location.href = 'common.html';
+    } else if (type === 'attached') {
+      window.location.href = 'attached.html';
+    } else if (type === 'attached_ac') {
+      window.location.href = 'attached_ac.html';
+    } else {
+      alert('Invalid selection');
+    }
+  });
+</script>
+
+</body>
+</html>

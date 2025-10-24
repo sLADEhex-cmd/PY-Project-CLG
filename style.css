@@ -1,0 +1,113 @@
+/* Reset some styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(50, 50, 50, 0.7);
+    color: white;
+    padding: 10px 30px;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px solid white;
+    padding: 5px 10px;
+    letter-spacing: 2px;
+}
+
+/* Navigation styles */
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav ul li {
+    color: white;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    text-decoration: underline;
+}
+
+nav ul .user {
+    cursor: default;
+}
+
+/* Hero section styles */
+.hero {
+    position: relative;
+    height: 100vh;
+    background: url('https://manage.collnod.com/Upload/Content/web_img_0_5_8_2023_14_17_12.gif') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-text {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    letter-spacing: 5px;
+}
+
+.hero-text h2 {
+    font-size: 40px;
+    margin-top: 10px;
+    letter-spacing: 10px;
+}
+
+/* Arrows */
+.arrow {
+    position: absolute;
+    top: 50%;
+    font-size: 30px;
+    color: white;
+    z-index: 2;
+    cursor: pointer;
+    user-select: none;
+}
+
+.arrow.left {
+    left: 30px;
+}
+
+.arrow.right {
+    right: 30px;
+}

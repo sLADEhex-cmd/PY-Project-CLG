@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hostel Incharge Registration</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF);
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .register-frame {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 1.5px solid #a3b1c6;
+      width: 400px;
+      text-align: center;
+      position: relative;
+    }
+    .register-frame h2 {
+      margin: 0 0 20px 0;
+      color: #273c75;
+    }
+    .input-group {
+      margin-bottom: 18px;
+      position: relative;
+      text-align: left;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #374765;
+    }
+    .input-group input[type="text"],
+    .input-group input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #6b8eae;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .email-suffix {
+      position: absolute;
+      right: 20px;
+      top: 65%;
+      transform: translateY(-50%);
+      color: #888;
+      pointer-events: none;
+      font-size: 18px;
+      background: solid;
+    }
+    .show-password {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-top: 6px;
+      cursor: pointer;
+      user-select: none;
+      color: #374765;
+    }
+    .show-password input {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+    .btn-grad {
+      background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+      margin: 15px 0 0 0;
+      padding: 14px 0;
+      text-align: center;
+      text-transform: uppercase;
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;
+      box-shadow: 0 0 20px #eee;
+      border-radius: 10px;
+      display: block;
+      width: 100%;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-grad:hover {
+      background-position: right center;
+      color: #fff;
+      text-decoration: none;
+    }
+    #password-error {
+      color: #d32f2f;
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <a href="landing.html" title="Home"
+    style="position:fixed; top:29px; left:29px; z-index:101; display:inline-flex; align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#ffffff" viewBox="0 0 24 24">
+      <path
+        d="M10.19 2.44a2.75 2.75 0 0 1 3.62 0l7.25 6.47A2.75 2.75 0 0 1 22 10.47V19a3 3 0 0 1-3 3h-2.25a.75.75 0 0 1-.75-.75V16a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-.75.75H5a3 3 0 0 1-3-3v-8.53a2.75 2.75 0 0 1 .94-2.06l7.25-6.47zm2.13 1.06a1.25 1.25 0 0 0-1.64 0l-7.25 6.47a1.25 1.25 0 0 0-.43.94V19a1.5 1.5 0 0 0 1.5 1.5h2.25V16a2.5 2.5 0 0 1 2.5-2.5h4A2.5 2.5 0 0 1 17.5 16v4.5H19a1.5 1.5 0 0 0 1.5-1.5v-8.53a1.25 1.25 0 0 0-.43-.94l-7.25-6.47z" />
+    </svg>
+  </a> 
+  <div class="register-frame">
+    <img src="flows.png" alt="Flows Logo"
+        style="width: 60px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px #0002; margin-right: 10px; float:left;">
+      
+    <h2>Hostel Incharge Registration</h2>
+    <form id="register-form" novalidate>
+      <br>
+      <div class="input-group">
+        <label for="fullname">Full Name</label>
+        <input id="fullname" type="text" placeholder="Full Name" required />
+      </div>
+      <div class="input-group" style="position: relative;">
+        <label for="email">MES Mail ID</label>
+        <input id="email" type="text" placeholder="Email" required />
+        <span class="email-suffix">@mes.ac.in</span>
+      </div>
+      <div class="input-group">
+        <label for="adminid">Administrator ID</label>
+        <input id="adminid" type="text" placeholder="Administrator ID" required />
+      </div>
+      <div class="input-group">
+        <label for="setpassword">Set Password</label>
+        <input id="setpassword" type="password" placeholder="Set Password" required />
+      </div>
+      <div class="input-group">
+        <label for="confirmpassword">Confirm Password</label>
+        <input id="confirmpassword" type="password" placeholder="Confirm Password" required />
+      </div>
+      <div class="show-password">
+        <input type="checkbox" id="showPassword" />
+        <label for="showPassword">Show Passwords</label>
+      </div>
+      <div id="password-error">Passwords do not match!</div>
+      <button type="submit" class="btn-grad">Register</button>
+    </form>
+  </div>
+
+  <script>
+    const showPasswordCheckbox = document.getElementById('showPassword');
+    const setPasswordInput = document.getElementById('setpassword');
+    const confirmPasswordInput = document.getElementById('confirmpassword');
+    const passwordError = document.getElementById('password-error');
+    const form = document.getElementById('register-form');
+
+    // Toggle show/hide password in both fields
+    showPasswordCheckbox.addEventListener('change', function() {
+      const type = this.checked ? 'text' : 'password';
+      setPasswordInput.type = type;
+      confirmPasswordInput.type = type;
+    });
+
+    // Check if passwords match and show/hide error
+    function checkPasswordsMatch() {
+      if (confirmPasswordInput.value !== setPasswordInput.value) {
+        passwordError.style.display = 'block';
+        return false;
+      } else {
+        passwordError.style.display = 'none';
+        return true;
+      }
+    }
+
+    setPasswordInput.addEventListener('input', checkPasswordsMatch);
+    confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+
+    // Append @mes.ac.in suffix to email if not present on submit
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('email');
+      if (!emailInput.value.endsWith('@mes.ac.in')) {
+        emailInput.value = emailInput.value.replace(/@.*$/, '') + '@mes.ac.in';
+      }
+
+      if (checkPasswordsMatch()) {
+        // If validation passed, you can submit data or show success message here
+        alert('Registration successful!');
+        form.reset();
+        passwordError.style.display = 'none';
+      } else {
+        passwordError.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

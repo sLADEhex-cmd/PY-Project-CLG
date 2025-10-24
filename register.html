@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pillai Boys Hostel Website - Register</title>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF);
+      min-height: 100vh;
+      width: 100vw;
+    }
+
+    .container-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      min-height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .side-logos {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 48px;
+      margin-left: 48px;
+      gap: 22px;
+    }
+
+    .side-logos img {
+      height: 70px;
+      width: auto;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px #0002;
+      background: #fff;
+    }
+
+    .register-frame {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 44px 54px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 1.5px solid #a3b1c6;
+      width: 380px;
+      text-align: center;
+      position: relative;
+    }
+
+    .register-frame h2 {
+      margin: 0 0 10px 0;
+      color: #273c75;
+      text-align: center;
+      margin-left: 10px;
+    }
+
+    .register-frame h4 {
+      margin: 0 0 24px 0;
+      color: #374765;
+      font-weight: normal;
+    }
+
+    .register-frame .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .register-frame input[type="text"],
+    .register-frame input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      padding-right: 90px;
+      border: 1px solid #6b8eae;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-bottom: 0;
+    }
+
+    .register-frame .email-suffix {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+      pointer-events: none;
+      font-size: 16px;
+      background: transparent;
+    }
+
+    .register-frame label[for="showPassword"] {
+      display: block;
+      text-align: left;
+      margin: 6px 0 12px 2px;
+      font-size: 13px;
+    }
+
+    /* Gradient button style */
+    .btn-grad {
+      background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+      margin: 10px 0 0 0;
+      padding: 15px 0;
+      text-align: center;
+      text-transform: uppercase;
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;
+      box-shadow: 0 0 20px #eee;
+      border-radius: 10px;
+      display: block;
+      width: 100%;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-grad:hover {
+      background-position: right center;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .container-flex {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .side-logos {
+        flex-direction: row;
+        margin: 24px 0 32px 0;
+        gap: 18px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .register-frame {
+        width: 98vw;
+        padding: 18px 4vw;
+      }
+
+      .side-logos img {
+        height: 48px;
+        border-radius: 10px;
+      }
+
+      .side-logos {
+        margin: 12px 0 18px 0;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img src="pill.png" alt="Pill Logo"
+    style="position:fixed; top:29px; right:29px; width:60px; height:auto; border-radius:10px; box-shadow:0 2px 8px #0002; z-index:100;">
+  <!-- Home symbol linked to landing.html -->
+ <a href="landing.html" title="Home"
+    style="position:fixed; top:29px; left:29px; z-index:101; display:inline-flex; align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#ffffff" viewBox="0 0 24 24">
+      <path
+        d="M10.19 2.44a2.75 2.75 0 0 1 3.62 0l7.25 6.47A2.75 2.75 0 0 1 22 10.47V19a3 3 0 0 1-3 3h-2.25a.75.75 0 0 1-.75-.75V16a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-.75.75H5a3 3 0 0 1-3-3v-8.53a2.75 2.75 0 0 1 .94-2.06l7.25-6.47zm2.13 1.06a1.25 1.25 0 0 0-1.64 0l-7.25 6.47a1.25 1.25 0 0 0-.43.94V19a1.5 1.5 0 0 0 1.5 1.5h2.25V16a2.5 2.5 0 0 1 2.5-2.5h4A2.5 2.5 0 0 1 17.5 16v4.5H19a1.5 1.5 0 0 0 1.5-1.5v-8.53a1.25 1.25 0 0 0-.43-.94l-7.25-6.47z" />
+    </svg>
+  </a>
+
+  </a>
+
+  <div class="container-flex" style="justify-content: center;">
+    <div class="side-logos">
+      <img src="pce.png" alt="PCE Logo">
+      <img src="pica.png" alt="PICA Logo">
+      <img src="pimsr.png" alt="PIMSR Logo">
+      <img src="pcacs.png" alt="PCACS Logo">
+    </div>
+    <div class="register-frame">
+      <img src="flows.png" alt="Flows Logo"
+        style="width: 60px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px #0002; margin-right: 10px; float:left;">
+      <h1>Student Registration</h1>
+      <h4>Create your account</h4>
+      <form>
+        <div class="input-group">
+          <input id="name" type="text" placeholder="Name" required />
+        </div>
+        <div class="input-group">
+          <input id="admission" type="text" placeholder="Admission Number" required />
+        </div>
+        <div class="input-group">
+          <input id="email" type="text" placeholder="Email" required />
+          <span class="email-suffix">student.@mes.ac.in</span>
+        </div>
+        <div class="input-group">
+          <input id="password" type="password" placeholder="Password" required />
+        </div>
+        <div class="input-group">
+          <input id="confirm-password" type="password" placeholder="Confirm Password" required />
+          <label for="showPassword">
+            <input type="checkbox" id="showPassword" style="margin-right:6px; vertical-align:middle;" />
+            Show Password
+          </label>
+          <span id="password-error" style="color:#d32f2f; font-size:13px; display:none; margin-left:2px;">Passwords do
+            not match!</span>
+        </div>
+        <button type="submit" class="btn-grad">Register</button>
+        <div style="margin-top:18px; font-size:15px;">
+          Already have an account?
+          <a href="log.html" style="color:#346178; text-decoration:underline;">Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Show/hide password functionality for both fields
+    document.getElementById('showPassword').addEventListener('change', function () {
+      const pwd = document.getElementById('password');
+      const cpwd = document.getElementById('confirm-password');
+      const type = this.checked ? 'text' : 'password';
+      pwd.type = type;
+      cpwd.type = type;
+    });
+
+    // Password match validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+    const errorSpan = document.getElementById('password-error');
+
+    function checkPasswordMatch() {
+      if (confirmPassword.value && password.value !== confirmPassword.value) {
+        errorSpan.style.display = 'inline';
+      } else {
+        errorSpan.style.display = 'none';
+      }
+    }
+
+    password.addEventListener('input', checkPasswordMatch);
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+
+    // Append @mes.ac.in to email if not present on form submit
+    document.querySelector('form').addEventListener('submit', function (e) {
+      const emailInput = document.getElementById('email');
+      if (!emailInput.value.endsWith('@mes.ac.in')) {
+        emailInput.value = emailInput.value.replace(/@.*$/, '') + '@mes.ac.in';
+      }
+      // Prevent form submission if passwords do not match
+      if (password.value !== confirmPassword.value) {
+        errorSpan.style.display = 'inline';
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Charge - Hostel Grievance Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #5f9ea0 0%, #000080 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+        }
+        
+        .home-icon-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .header-content h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .header-content p {
+            color: #e0f7fa;
+            font-size: 16px;
+        }
+
+        .home-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .home-btn svg {
+            stroke: white;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #5f9ea0 0%, #346178 100%);
+            border-radius: 8px;
+            padding: 24px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background-color: #f0f4f8;
+            color: #333;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #5f9ea0;
+        }
+
+        select {
+            background-color: #f0f4f8;
+            color: #333;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #5f9ea0;
+        }
+
+        /* Grievances Table */
+        .grievances-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #5f9ea0 0%, #346178 100%);
+            color: white;
+        }
+
+        table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tbody tr:hover {
+            background-color: #f8fafb;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-pending { background-color: #fef3c7; color: #92400e; }
+        .status-in-progress { background-color: #bfdbfe; color: #1e40af; }
+        .status-resolved { background-color: #dcfce7; color: #166534; }
+
+        .priority-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-high { background-color: #fee2e2; color: #991b1b; }
+        .priority-medium { background-color: #fef3c7; color: #78350f; }
+        .priority-low { background-color: #dcfce7; color: #166534; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view {
+            background-color: #5f9ea0;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #346178;
+        }
+
+        .btn-update {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #059669;
+        }
+
+        .btn-reject {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background-color: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header h2 {
+            color: #273c75;
+            margin-bottom: 20px;
+        }
+
+        .modal-body p {
+            margin-bottom: 15px;
+            color: #374765;
+            line-height: 1.6;
+        }
+
+        .modal-body strong {
+            color: #273c75;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+
+        .btn-close {
+            background-color: #cbd5e1;
+            color: #333;
+        }
+
+        .btn-close:hover {
+            background-color: #94a3b8;
+        }
+
+        .update-form {
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #273c75;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .empty-state {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .home-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table-wrapper {
+                font-size: 12px;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="home-icon-wrapper">
+                <a href="inchargedash.html" class="home-btn" title="Go to Home">
+                    <svg style="width: 28px; height: 28px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </a>
+            </div>
+            <div class="header-content">
+                <h1>In Charge - Grievance Management</h1>
+                <p>Manage and resolve hostel grievances efficiently</p>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-box">
+                <div class="stat-number" id="totalGrievances">0</div>
+                <div class="stat-label">Total Grievances</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="pendingCount">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="inProgressCount">0</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="resolvedCount">0</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-grid">
+                <div class="search-box">
+                    <input type="text" id="searchTerm" placeholder="Search by title, room, or student..." onkeyup="filterGrievances()">
+                </div>
+                <select id="filterStatus" onchange="filterGrievances()">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+                <select id="filterPriority" onchange="filterGrievances()">
+                    <option value="all">All Priority</option>
+                    <option value="high">High Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="low">Low Priority</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Grievances Table -->
+        <div class="grievances-table">
+            <div class="table-wrapper">
+                <table id="grievancesTable">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Room</th>
+                            <th>Student</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="8" class="empty-state">No grievances found. Check back later.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing and updating grievances -->
+    <div id="grievanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Grievance Details</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>Title:</strong> <span id="modalTitle"></span></p>
+                <p><strong>Room:</strong> <span id="modalRoom"></span></p>
+                <p><strong>Student Name:</strong> <span id="modalStudent"></span></p>
+                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                <p><strong>Priority:</strong> <span id="modalPriority"></span></p>
+                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                <p><strong>Description:</strong></p>
+                <p id="modalDescription" style="background-color: #f8fafc; padding: 12px; border-radius: 6px;"></p>
+
+                <div class="update-form">
+                    <div class="form-group">
+                        <label for="updateStatus">Update Status:</label>
+                        <select id="updateStatus">
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateResponse">Response/Notes:</label>
+                        <textarea id="updateResponse" placeholder="Add your response or notes here..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-close" onclick="closeModal()">Close</button>
+                <button class="btn btn-update" onclick="saveUpdate()">Save Updates</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let grievances = [];
+
+        let currentEditingId = null;
+
+        function updateStats() {
+            document.getElementById('totalGrievances').textContent = grievances.length;
+            document.getElementById('pendingCount').textContent = grievances.filter(g => g.status === 'pending').length;
+            document.getElementById('inProgressCount').textContent = grievances.filter(g => g.status === 'in-progress').length;
+            document.getElementById('resolvedCount').textContent = grievances.filter(g => g.status === 'resolved').length;
+        }
+
+        function filterGrievances() {
+            const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+            const filterPriority = document.getElementById('filterPriority').value;
+
+            const filtered = grievances.filter(g => {
+                const matchesSearch = g.title.toLowerCase().includes(searchTerm) ||
+                                    g.room.toLowerCase().includes(searchTerm) ||
+                                    g.student.toLowerCase().includes(searchTerm);
+                const matchesStatus = filterStatus === 'all' || g.status === filterStatus;
+                const matchesPriority = filterPriority === 'all' || g.priority === filterPriority;
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+
+            displayTable(filtered);
+        }
+
+        function displayTable(list) {
+            const tbody = document.getElementById('tableBody');
+
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No grievances found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = list.map(g => `
+                <tr>
+                    <td>${g.title}</td>
+                    <td>${g.room}</td>
+                    <td>${g.student}</td>
+                    <td><span class="priority-badge priority-${g.priority}">${g.priority}</span></td>
+                    <td><span class="status-badge status-${g.status}">${g.status}</span></td>
+                    <td>${g.category}</td>
+                    <td>${g.date}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="openModal(${g.id})">View</button>
+                            <button class="btn btn-update" onclick="openModal(${g.id})">Update</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openModal(id) {
+            currentEditingId = id;
+            const grievance = grievances.find(g => g.id === id);
+
+            document.getElementById('modalTitle').textContent = grievance.title;
+            document.getElementById('modalRoom').textContent = grievance.room;
+            document.getElementById('modalStudent').textContent = grievance.student;
+            document.getElementById('modalCategory').textContent = grievance.category;
+            document.getElementById('modalPriority').textContent = grievance.priority;
+            document.getElementById('modalDate').textContent = grievance.date;
+            document.getElementById('modalDescription').textContent = grievance.description;
+            document.getElementById('updateStatus').value = grievance.status;
+            document.getElementById('updateResponse').value = grievance.response;
+
+            document.getElementById('grievanceModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('grievanceModal').style.display = 'none';
+            currentEditingId = null;
+        }
+
+        function saveUpdate() {
+            if (currentEditingId === null) return;
+
+            const grievance = grievances.find(g => g.id === currentEditingId);
+            grievance.status = document.getElementById('updateStatus').value;
+            grievance.response = document.getElementById('updateResponse').value;
+
+            filterGrievances();
+            updateStats();
+            closeModal();
+            alert('Grievance updated successfully!');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('grievanceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize
+        updateStats();
+        displayTable(grievances);
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Ranade&family=Poppins&family=Rubik&family=Raleway&display=swap"
+    rel="stylesheet">
+
+
+  <title>Student- Login</title>
+  <style>
+    .ranade-font {
+      font-family: 'Ranade', sans-serif;
+    }
+
+    .poppins-font {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .rubik-font {
+      font-family: 'Rubik', sans-serif;
+    }
+
+    .raleway-font {
+      font-family: 'Raleway', sans-serif;
+    }
+
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Ranade', sans-serif;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF);
+      min-height: 100vh;
+      width: 100vw;
+    }
+
+    .container-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+      gap: 54px;
+      /* large gap to visually separate image and form */
+    }
+
+    .standalone-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* optional: add extra styling if needed */
+    }
+
+    .standalone-image img {
+      height: 700px;
+      width: 500px;
+      object-fit: cover;
+      border-radius: 32px;
+      box-shadow: 0 6px 32px #0002;
+      background: #fff;
+      display: block;
+    }
+
+    .login-frame {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      padding: 60px 54px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 1.5px solid #a3b1c6;
+      width: 380px;
+      text-align: center;
+      position: relative;
+    }
+
+    .login-frame h2 {
+      margin: 0 0 10px 0;
+      color: #273c75;
+      text-align: center;
+      margin-left: 10px;
+    }
+
+    .login-frame h4 {
+      margin: 0 0 24px 0;
+      color: #374765;
+      font-weight: normal;
+    }
+
+    .login-frame .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .login-frame input[type="text"],
+    .login-frame input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      padding-right: 90px;
+      border: 1px solid #6b8eae;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .login-frame .email-suffix {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+      pointer-events: none;
+      font-size: 16px;
+      background: transparent;
+    }
+
+    .login-frame label[for="showPassword"] {
+      display: block;
+      text-align: left;
+      margin: 6px 0 12px 2px;
+      font-size: 13px;
+    }
+
+    .btn-grad {
+      background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+      margin: 10px 0 0 0;
+      padding: 15px 0;
+      text-align: center;
+      text-transform: uppercase;
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;
+      box-shadow: 0 0 20px #eee;
+      border-radius: 10px;
+      display: block;
+      width: 100%;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-grad:hover {
+      background-position: right center;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .container-flex {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .standalone-image img {
+        width: 98vw;
+        height: auto;
+        max-width: 98vw;
+        max-height: 54vh;
+      }
+
+      .login-frame {
+        width: 98vw;
+        max-width: 380px;
+        padding: 28px 3vw;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .standalone-image img {
+        width: 94vw;
+        height: auto;
+        max-height: 220px;
+      }
+
+      .login-frame {
+        padding: 18px 4vw;
+        width: 98vw;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img src="pill.png" alt="Pill Logo"
+    style="position:fixed; top:29px; right:29px; width:60px; height:auto; border-radius:10px; box-shadow:0 2px 8px #0002; z-index:100;">
+  <a href="landing.html" title="Home"
+    style="position:fixed; top:29px; left:29px; z-index:101; display:inline-flex; align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#ffffff" viewBox="0 0 24 24">
+      <path
+        d="M10.19 2.44a2.75 2.75 0 0 1 3.62 0l7.25 6.47A2.75 2.75 0 0 1 22 10.47V19a3 3 0 0 1-3 3h-2.25a.75.75 0 0 1-.75-.75V16a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-.75.75H5a3 3 0 0 1-3-3v-8.53a2.75 2.75 0 0 1 .94-2.06l7.25-6.47zm2.13 1.06a1.25 1.25 0 0 0-1.64 0l-7.25 6.47a1.25 1.25 0 0 0-.43.94V19a1.5 1.5 0 0 0 1.5 1.5h2.25V16a2.5 2.5 0 0 1 2.5-2.5h4A2.5 2.5 0 0 1 17.5 16v4.5H19a1.5 1.5 0 0 0 1.5-1.5v-8.53a1.25 1.25 0 0 0-.43-.94l-7.25-6.47z" />
+    </svg>
+  </a>
+  <div class="container-flex">
+    <div class="standalone-image">
+      <img src="stdLogin.jpg" alt="Student Login">
+    </div>
+    <div class="login-frame">
+       <img src="flows.png" alt="Flows Logo"
+        style="width: 60px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px #0002; margin-right: 10px; float:left;">
+      <h1 class="poppins-font">Student Login</h1>
+      <h4 class="rubik-font">Enter your credentials</h4>
+      <form>
+        <div class="input-group">
+          <input id="email" type="text" placeholder="Email" required />
+          <span class="email-suffix">@mes.ac.in</span>
+        </div>
+        <div class="input-group">
+          <input id="password" type="password" placeholder="Password" required />
+          <label for="showPassword">
+            <input type="checkbox" id="showPassword" style="margin-right:6px; vertical-align:middle;" />
+            Show Password
+          </label>
+        </div>
+        <button type="submit" class="btn-grad">Login</button>
+        <div style="margin-top:18px; font-size:15px;">
+          Don't have an account?
+          <a href="register.html" style="color:#346178; text-decoration:underline;">Register</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Show/hide password functionality
+    document.getElementById('showPassword').addEventListener('change', function () {
+      const pwd = document.getElementById('password');
+      pwd.type = this.checked ? 'text' : 'password';
+    });
+
+    // Append @mes.ac.in to email if not present on form submit
+    document.querySelector('form').addEventListener('submit', function (e) {
+      const emailInput = document.getElementById('email');
+      if (!emailInput.value.endsWith('@mes.ac.in')) {
+        emailInput.value = emailInput.value.replace(/@.*$/, '') + '@mes.ac.in';
+      }
+    });
+  </script>
+</body>
+
+</html>

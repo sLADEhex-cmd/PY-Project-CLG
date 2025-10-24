@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pillai Boys Hostel Website - Landing Page</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      height: 100%;
+      min-height: 100vh;
+      width: 100vw;
+      background: linear-gradient(135deg, #5f9ea0 0%, #000080 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      position: relative;
+    }
+    .header {
+      width: 100%;
+      padding: 40px 0 20px 0;
+      background: rgba(255,255,255,0.04);
+      text-align: center;
+    }
+    .header h1 {
+      color: #fff;
+      font-size: 2.7rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+    .header p {
+      color: #e0f7fa;
+      font-size: 1.18rem;
+      margin: 0 0 15px 0;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: row;
+      max-width: 950px;
+      width: 90%;
+      margin: 35px auto 0 auto;
+      background: rgba(255,255,255,0.85);
+      border-radius: 18px;
+      box-shadow: 0 8px 36px rgba(39, 60, 117, 0.08);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .main-info {
+      flex: 3;
+      padding: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .main-info h2 {
+      color: #273c75;
+      font-size: 2rem;
+      margin: 0 0 19px 0;
+      letter-spacing: 1px;
+    }
+    .main-info p {
+      color: #374765;
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    .main-image {
+      flex: 2;
+      min-width: 180px;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=800&q=80') center/cover no-repeat;
+      height: 320px;
+    }
+
+    /* Top right auth buttons */
+    .auth-buttons {
+      position: fixed;
+      top: 32px;
+      right: 40px;
+      z-index: 100;
+      display: flex;
+      gap: 16px;
+    }
+    .auth-btn {
+      background: #5f9ea0;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 11px 26px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #00008022;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .auth-btn:hover {
+      background: #346178;
+    }
+    /* Dropdown styles */
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: #fff;
+      min-width: 180px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px #00008022;
+      padding: 8px 0;
+      z-index: 200;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .dropdown a {
+      color: #273c75;
+      padding: 12px 22px;
+      text-decoration: none;
+      font-size: 1rem;
+      border: none;
+      background: none;
+      text-align: left;
+      transition: background 0.18s;
+      cursor: pointer;
+      display: block;
+    }
+    .dropdown a:hover {
+      background: #e3f2fd;
+      color: #2980B9;
+    }
+
+    /* Apply for Hostel button on the right center */
+    .apply-hostel-container {
+      position: fixed;
+      top: 50%;
+      right: 40px;
+      transform: translateY(-50%);
+      z-index: 100;
+    }
+    #applyHostelBtn {
+      background: #00796b;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 11px 26px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #004d40aa;
+      transition: background 0.2s;
+    }
+    #applyHostelBtn:hover {
+      background: #004d40;
+    }
+
+    @media (max-width: 800px) {
+      .main-content {
+        flex-direction: column;
+      }
+      .main-image, .main-info {
+        width: 100%;
+        min-width: unset;
+        padding: 28px;
+        height: 210px;
+      }
+      .auth-buttons {
+        top: 18px;
+        right: 12px;
+        gap: 8px;
+      }
+      .auth-btn {
+        padding: 9px 14px;
+        font-size: 0.98rem;
+      }
+      .dropdown {
+        min-width: 140px;
+      }
+      .apply-hostel-container {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        right: 12px;
+        transform: none;
+      }
+      #applyHostelBtn {
+        padding: 9px 14px;
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-buttons">
+    <div style="position:relative;">
+      <button class="auth-btn" id="loginBtn">Login</button>
+      <div class="dropdown" id="loginDropdown">
+        <a href="log.html">Login as Student</a>
+        <a href="inchargelogin.html">Login as Hostel Incharge</a>
+      </div>
+    </div>
+    <div style="position:relative;">
+      <button class="auth-btn" id="registerBtn">Register</button>
+      <div class="dropdown" id="registerDropdown">
+        <a href="register.html">Register as Student</a>
+        <a href="adminregister.html">Register as Hostel Incharge</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="header">
+    <h4>Mahatma Education Society's</h4>
+    <h1>Pillai Boys Hostel Website</h1>
+    <p>Welcome to a comfortable & secure community.<br>Find details, connect, and manage your hostel life at Pillai's easily.</p>
+  </div>
+
+  <div class="main-content">
+    <div class="main-info">
+      <h2>Discover Your Hostel Home</h2>
+      <p>
+        Explore facilities, connect with fellow residents, get all hostel info, and manage your stay—all in one place. <br>
+        Secure, easy, and built exclusively for Pillai Boys Hostel.
+      </p>
+    </div>
+    <div class="main-image"></div>
+  </div>
+
+  <div class="apply-hostel-container">
+    <button class="auth-btn" id="applyHostelBtn">Apply for Hostel</button>
+  </div>
+
+  <script>
+    // Dropdown logic for Login
+    const loginBtn = document.getElementById('loginBtn');
+    const loginDropdown = document.getElementById('loginDropdown');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerDropdown = document.getElementById('registerDropdown');
+
+    function closeDropdowns(e) {
+      if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+        loginDropdown.style.display = 'none';
+      }
+      if (!registerBtn.contains(e.target) && !registerDropdown.contains(e.target)) {
+        registerDropdown.style.display = 'none';
+      }
+    }
+
+    loginBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      loginDropdown.style.display = loginDropdown.style.display === 'flex' ? 'none' : 'flex';
+      registerDropdown.style.display = 'none';
+    });
+
+    registerBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      registerDropdown.style.display = registerDropdown.style.display === 'flex' ? 'none' : 'flex';
+      loginDropdown.style.display = 'none';
+    });
+
+    document.addEventListener('click', closeDropdowns);
+
+    // Apply for Hostel button click
+    document.getElementById('applyHostelBtn').addEventListener('click', function() {
+      window.location.href = 'purchase.html';
+    });
+  </script>
+</body>
+</html>

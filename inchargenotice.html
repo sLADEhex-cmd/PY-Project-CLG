@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Ranade&family=Poppins&family=Rubik&family=Raleway&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Admin - Student Notices</title>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Ranade', sans-serif;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA, #FFFFFF);
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .home-btn {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 150;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #273c75;
+      font-size: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .home-btn:hover {
+      color: #77A1D3;
+      transform: scale(1.1);
+    }
+
+    .page-container {
+      padding: 60px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 100vh;
+      margin-left: 90px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .page-header h1 {
+      color: #273c75;
+      font-size: 2.8rem;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .form-section,
+    .notices-section {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-section h2,
+    .notices-section h2 {
+      color: #273c75;
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #273c75;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'Ranade', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2980B9;
+      box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #2980B9;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1f5f8f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #7f8c8d;
+      transform: translateY(-2px);
+    }
+
+    .notice-item {
+      background: rgba(245, 245, 245, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #f39c12;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .notice-item.pinned {
+      border-left-color: #e74c3c;
+      background: linear-gradient(135deg, rgba(255, 235, 235, 0.9), rgba(255, 245, 245, 0.9));
+    }
+
+    .pin-badge {
+      display: inline-block;
+      background: #e74c3c;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .notice-title {
+      color: #273c75;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .notice-content {
+      color: #374765;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0 0 15px 0;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    .notice-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-edit {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #2980B9;
+    }
+
+    .btn-delete {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #c0392b;
+    }
+
+    .btn-pin {
+      background: #27ae60;
+      color: white;
+    }
+
+    .btn-pin:hover {
+      background: #229954;
+    }
+
+    .btn-unpin {
+      background: #f39c12;
+      color: white;
+    }
+
+    .btn-unpin:hover {
+      background: #d68910;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #7f8c8d;
+      padding: 40px 20px;
+      font-size: 1.1rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      color: #273c75;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #7f8c8d;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #273c75;
+    }
+
+    @media (max-width: 768px) {
+      .page-container {
+        margin-left: 0;
+        padding: 40px 20px;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .admin-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .home-btn {
+        top: 20px;
+        left: 20px;
+        font-size: 18px;
+      }
+
+      .notice-actions {
+        flex-direction: column;
+      }
+
+      .btn-action {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="inchargedash.html" class="home-btn" title="Home">
+    <i class="fas fa-home"></i>
+  </a>
+
+  <div class="page-container">
+    <div class="page-header">
+      <h1 class="poppins-font">Admin - Student Notices</h1>
+    </div>
+
+    <div class="admin-layout">
+      <!-- Form Section -->
+      <div class="form-section">
+        <h2>
+          <i class="fas fa-plus-circle"></i> Add/Edit Notice
+        </h2>
+        <form id="noticeForm">
+          <div class="form-group">
+            <label for="titleInput">Notice Title</label>
+            <input type="text" id="titleInput" placeholder="Enter notice title" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contentInput">Notice Content</label>
+            <textarea id="contentInput" placeholder="Enter notice content..." required></textarea>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="pinnedCheckbox">
+            <label for="pinnedCheckbox">Pin this notice</label>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <i class="fas fa-save"></i> Add Notice
+            </button>
+            <button type="button" class="btn btn-secondary" id="resetBtn">
+              <i class="fas fa-times"></i> Clear
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Notices List Section -->
+      <div class="notices-section">
+        <h2>
+          <i class="fas fa-list"></i> Notices (Live Preview)
+        </h2>
+        <div id="noticesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Notice</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="editForm">
+        <div class="form-group">
+          <label for="editTitle">Notice Title</label>
+          <input type="text" id="editTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="editContent">Notice Content</label>
+          <textarea id="editContent" required></textarea>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="editPinned">
+          <label for="editPinned">Pin this notice</label>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let notices = JSON.parse(localStorage.getItem('notices')) || [
+      {
+        id: 1,
+        title: 'Hostel Allotment',
+        content: 'Hostel Allotment cycles every year from June-August',
+        pinned: true
+      },
+      {
+        id: 2,
+        title: 'Meal Timings',
+        content: 'Breakfast 8:00am-10:00am everyday, Dinner at 8:00pm to 9:30pm everyday',
+        pinned: true
+      }
+    ];
+
+    let editingId = null;
+
+    function saveNotices() {
+      localStorage.setItem('notices', JSON.stringify(notices));
+    }
+
+    function renderNotices() {
+      const list = document.getElementById('noticesList');
+      
+      if (notices.length === 0) {
+        list.innerHTML = '<div class="empty-message"><i class="fas fa-inbox"></i><p>No notices yet. Create one to get started!</p></div>';
+        return;
+      }
+
+      const pinnedNotices = notices.filter(n => n.pinned).sort((a, b) => b.id - a.id);
+      const unpinnedNotices = notices.filter(n => !n.pinned).sort((a, b) => b.id - a.id);
+      const sorted = [...pinnedNotices, ...unpinnedNotices];
+
+      list.innerHTML = sorted.map(notice => `
+        <div class="notice-item ${notice.pinned ? 'pinned' : ''}">
+          ${notice.pinned ? '<span class="pin-badge poppins-font">Pinned</span>' : ''}
+          <h3 class="notice-title poppins-font">${escapeHtml(notice.title)}</h3>
+          <p class="notice-content rubik-font">${escapeHtml(notice.content)}</p>
+          <div class="notice-actions">
+            <button class="btn-action btn-edit" onclick="editNotice(${notice.id})">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn-action ${notice.pinned ? 'btn-unpin' : 'btn-pin'}" onclick="togglePin(${notice.id})">
+              <i class="fas fa-thumbtack"></i> ${notice.pinned ? 'Unpin' : 'Pin'}
+            </button>
+            <button class="btn-action btn-delete" onclick="deleteNotice(${notice.id})">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function addNotice(title, content, pinned) {
+      const id = Math.max(...notices.map(n => n.id), 0) + 1;
+      notices.push({ id, title, content, pinned });
+      saveNotices();
+      renderNotices();
+    }
+
+    function editNotice(id) {
+      editingId = id;
+      const notice = notices.find(n => n.id === id);
+      document.getElementById('editTitle').value = notice.title;
+      document.getElementById('editContent').value = notice.content;
+      document.getElementById('editPinned').checked = notice.pinned;
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function updateNotice(title, content, pinned) {
+      const notice = notices.find(n => n.id === editingId);
+      if (notice) {
+        notice.title = title;
+        notice.content = content;
+        notice.pinned = pinned;
+        saveNotices();
+        renderNotices();
+        closeModal();
+      }
+    }
+
+    function deleteNotice(id) {
+      if (confirm('Are you sure you want to delete this notice?')) {
+        notices = notices.filter(n => n.id !== id);
+        saveNotices();
+        renderNotices();
+      }
+    }
+
+    function togglePin(id) {
+      const notice = notices.find(n => n.id === id);
+      if (notice) {
+        notice.pinned = !notice.pinned;
+        saveNotices();
+        renderNotices();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active');
+      editingId = null;
+    }
+
+    document.getElementById('noticeForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('titleInput').value;
+      const content = document.getElementById('contentInput').value;
+      const pinned = document.getElementById('pinnedCheckbox').checked;
+
+      if (title && content) {
+        addNotice(title, content, pinned);
+        document.getElementById('noticeForm').reset();
+      }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('noticeForm').reset();
+    });
+
+    document.getElementById('editForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('editTitle').value;
+      const content = document.getElementById('editContent').value;
+      const pinned = document.getElementById('editPinned').checked;
+
+      if (title && content) {
+        updateNotice(title, content, pinned);
+      }
+    });
+
+    document.getElementById('editModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('editModal')) {
+        closeModal();
+      }
+    });
+
+    renderNotices();
+  </script>
+</body>
+
+</html>
