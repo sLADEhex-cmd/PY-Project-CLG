@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Stay Details</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #fff;
+      padding: 40px;
+    }
+    header {ip
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #00f2fe, #4facfe, #f093fb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .room {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    .room img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .details {
+      flex: 1;
+    }
+    .details h2 {
+      color: #00e5ff;
+      margin-bottom: 15px;
+    }
+    .details ul {
+      list-style: none;
+      padding: 0;
+    }
+    .details ul li {
+      margin: 10px 0;
+      position: relative;
+      padding-left: 20px;
+    }
+    .details ul li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #00f2fe;
+    }
+    .contact {
+      margin-top: 30px;
+    }
+    .contact p {
+      margin: 8px 0;
+    }
+    .payment {
+      margin-top: 40px;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    .payment button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .payment button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 30px;
+      color: #ffe259;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <img src="pill.png" alt="Pill Logo"
+    style="position:fixed; top:29px; right:29px; width:60px; height:auto; border-radius:10px; box-shadow:0 2px 8px #0002; z-index:100;">
+  <a href="studentdash.html" title="Home"
+    style="position:fixed; top:29px; left:29px; z-index:101; display:inline-flex; align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#ffffff" viewBox="0 0 24 24">
+      <path
+        d="M10.19 2.44a2.75 2.75 0 0 1 3.62 0l7.25 6.47A2.75 2.75 0 0 1 22 10.47V19a3 3 0 0 1-3 3h-2.25a.75.75 0 0 1-.75-.75V16a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-.75.75H5a3 3 0 0 1-3-3v-8.53a2.75 2.75 0 0 1 .94-2.06l7.25-6.47zm2.13 1.06a1.25 1.25 0 0 0-1.64 0l-7.25 6.47a1.25 1.25 0 0 0-.43.94V19a1.5 1.5 0 0 0 1.5 1.5h2.25V16a2.5 2.5 0 0 1 2.5-2.5h4A2.5 2.5 0 0 1 17.5 16v4.5H19a1.5 1.5 0 0 0 1.5-1.5v-8.53a1.25 1.25 0 0 0-.43-.94l-7.25-6.47z" />
+    </svg>
+  </a>
+  <header>
+    <h1>Choose Attached AC? (Attached Washroom + AC)</h1>
+  </header>
+
+  <div class="room">
+    <img src="https://images.unsplash.com/photo-1623625434462-e5e42318ae49?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Room">
+    <div class="details">
+      <h2>Room Features:</h2>
+      <ul>
+        <li>2 beds</li>
+        <li>Attached Washroom</li>
+        <li>1 ton high cooling AC</li>
+        <li>1 shared washing machine per floor</li>
+        <li>2 charging switch boards</li>
+        <li>2 study tables (1 per person)</li>
+        <li>2 small cupboards (1 per person)</li>
+      </ul>
+      <div class="contact">
+        <h2>Contact for more details:</h2>
+        <p>📞 +91 98765 43210</p>
+        <p>📧 hostelservice.mes.ac.in</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment">
+    <h2>PROCEED FOR FURTHER DETAILS</h2>
+    <p>Pay securely online and confirm your booking instantly.</p>
+<button onclick="window.location.href='verify.html'">CONFIRM YOUR DETAILS</button>  </div>
+
+  <a href="purchase.html" class="back">⬅All Plans</a>
+</body>
+</html>
